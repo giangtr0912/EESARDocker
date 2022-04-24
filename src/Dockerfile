@@ -5,7 +5,7 @@ FROM     debian:stretch
 
 MAINTAINER Mort Canty "mort.canty@gmail.com"
 
-ENV     REFRESHED_AT 2021-03-21
+ENV     REFRESHED_AT 2022-04-24
  
 RUN apt-get update && apt-get install -y \
     python3 \
@@ -48,10 +48,11 @@ RUN     rm auxil-1.0.tar.gz
 
 ENV     REFRESHED_AT 2020-03-16
 
-COPY    interface.ipynb /home/interface.ipynb
-COPY    dynearthnet.ipynb /home/dynearthnet.ipynb
+COPY    notebooks_begin/interface.ipynb /home/interface.ipynb
+COPY    notebooks_begin/dynearthnet.ipynb /home/dynearthnet.ipynb
 
 ADD     scripts /home/scripts
+ADD     notebooks /home/notebooks
 
 # ipython notebook startup script
 COPY    notebook.sh /
