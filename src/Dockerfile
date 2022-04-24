@@ -1,9 +1,11 @@
 # Dockerfile with Jupyter widget interface for 
 # Sequential SAR on Earth Engine
  
-FROM     debian:stretch
+# FROM     debian:stretch
+FROM osgeo/gdal:ubuntu-small-3.4.1 
 
-MAINTAINER Mort Canty "mort.canty@gmail.com"
+
+MAINTAINER Giang Tran "giangde0912@gmail.com"
 
 ENV     REFRESHED_AT 2022-04-24
  
@@ -22,6 +24,29 @@ RUN apt-get update && apt-get install -y \
 RUN     pip3 install --upgrade pip   
 
 EXPOSE 8888
+
+# Labels
+LABEL org.label-schema.schema-version="1.0"
+LABEL org.label-schema.name="gingtran/geotools"
+LABEL org.label-schema.description="GEO Data Sciences"
+LABEL org.label-schema.version="1.0.0"
+LABEL org.label-schema.vendor="Giang Tran"
+
+ENV LANG C.UTF-8
+ENV LC_ALL C.UTF-8
+
+RUN apt-get update \
+    && apt install -y software-properties-common \
+    && add-apt-repository ppa:deadsnakes/ppa \
+    && apt-get update \
+    && apt-get install ffmpeg libsm6 libxext6  -y \
+    && apt -y install python3.8 curl \
+    && apt-get install -y python3-pip \
+    && apt-get install -y gdal-bin \
+    && apt-get install -y	python3-gdal \
+	&& apt-get install -y python3-geopandas
+
+RUN     pip3 install earthengine-api
 
 COPY    requirements.txt /home 
 RUN     pip3 install -r /home/requirements.txt
@@ -46,12 +71,13 @@ WORKDIR /home
 RUN     rm -rf auxil-1.0
 RUN     rm auxil-1.0.tar.gz
 
-ENV     REFRESHED_AT 2020-03-16
+ENV     REFRESHED_AT 2022-04-24
 
-COPY    notebooks_begin/interface.ipynb /home/interface.ipynb
-COPY    notebooks_begin/dynearthnet.ipynb /home/dynearthnet.ipynb
+COPY    interface.ipynb /home/interface.ipynb
+COPY    dynearthnet.ipynb /home/dynearthnet.ipynb
 
 ADD     scripts /home/scripts
+ADD     crc4docker /home/crc4docker
 ADD     notebooks /home/notebooks
 
 # ipython notebook startup script
